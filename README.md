@@ -58,6 +58,17 @@ STATICFILES_DIRS = (
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 ```
 
+- Add 'django.template.context_processors.static' to context_processors option on the TEMPLATES settings
+```python
+# settings.py
+# TEMPLATES settings
+'context_processors': [
+    ...,
+    'django.template.context_processors.static',
+    ...,
+]
+```
+
 - Add CSS and JS to your django project
 ```html
 <!DOCTYPE html>
@@ -98,3 +109,4 @@ $ python manage.py semantic_ui uninstall --semantic_folder=semantic
 ## Releases notes:
 
 - 1.0.0: Initial and beta version (only installation and settings).
+- 1.0.1: New settings added on the README.md file
