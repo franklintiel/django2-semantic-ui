@@ -118,3 +118,5 @@ $ python manage.py semantic_ui uninstall && pip uninstall django2-semantic-ui
 - 1.0.0: Initial and beta version (only installation and settings).
 - 1.0.1: New settings added on the README.md file
 - 1.1.0: Logic updated to install / uninstall django-semantic-ui, new settings added.
+- 1.1.1: README.md updated
+- 1.1.2: README.md updated
