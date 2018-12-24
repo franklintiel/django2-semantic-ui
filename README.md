@@ -59,6 +59,7 @@ $ python manage.py semantic_ui gulp_build
 7) Configure the static files and folder, see: [Managing static files](https://docs.djangoproject.com/en/1.11/howto/static-files/)
 ```python
 STATIC_URL = '/static/'
+```
 
 8) Add CSS and JS to your django project
 ```html
