@@ -7,17 +7,17 @@ Easy python package that allow install, configure and use Semantic UI Framework 
 - Django 2.x.x
 
 ## Installing
-- Install gulp (CLI), the version 3.9.1 is the available to work with Semantic UI Framework.
+1) Install gulp (CLI), the version 3.9.1 is the available to work with Semantic UI Framework.
 ```shell
 $ sudo npm install -g gulp@3.9.1
 ```
 
-- Install the django2-semantic-ui package:
+2) Install the django2-semantic-ui package:
 ```shell
 $ pip install django2-semantic-ui
 ```
 
-- Configure django2-semantic-ui in the settings.py:
+3) Configure django2-semantic-ui in the settings.py:
 ```python
 INSTALLED_APPS = [
     ...,
@@ -25,7 +25,7 @@ INSTALLED_APPS = [
 ]
 ```
 
-- Running the install command
+4) Running the install command
 ```shell
 $ python manage.py semantic_ui install
 ```
@@ -40,25 +40,12 @@ $ python manage.py semantic_ui install
 ? Where should we put Semantic UI inside your project? (semantic/) semantic
 ```
 
-- Running the gulp build command
+5) Running the gulp build command
 ```shell
-$ python manage.py semantic_ui gulp_build --semantic_folder=semantic
-```
-**NOTE**: The argument "--semantic_folder" is the name assigned to the "semantic" folder on the above step
-
-## Settings
-
-- Configure the static files and folder, see: [Managing static files](https://docs.djangoproject.com/en/2.0/howto/static-files/)
-```python
-STATIC_URL = '/static/'
-STATICFILES_DIRS = (
-    ...,
-    ('semantic', os.path.join(BASE_DIR, 'static/semantic')),
-)
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+$ python manage.py semantic_ui gulp_build
 ```
 
-- Add 'django.template.context_processors.static' to context_processors option on the TEMPLATES settings
+6) Add 'django.template.context_processors.static' to context_processors option on the TEMPLATES settings
 ```python
 # settings.py
 # TEMPLATES settings
@@ -69,22 +56,37 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 ]
 ```
 
-- Add CSS and JS to your django project
+7) Configure the static files and folder, see: [Managing static files](https://docs.djangoproject.com/en/1.11/howto/static-files/)
+```python
+STATIC_URL = '/static/'
+
+8) Add CSS and JS to your django project
 ```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Semantic UI Test</title>
-    <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}semantic/dist/semantic.min.css">
+    <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}dsu/semantic_folder_name/dist/semantic.min.css">
 </head>
 <body>
     <h1>Title example</h1>
     <button>Button Test example</button>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
-    <script src="{{ STATIC_URL }}semantic/dist/semantic.min.js"></script>
+    <script src="{{ STATIC_URL }}dsu/semantic_folder_name/dist/semantic.min.js"></script>
 </body>
 </html>
+```
+
+## Settings Production environment
+- Configure the static files and folder, see: [Managing static files](https://docs.djangoproject.com/en/1.11/howto/static-files/)
+```python
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+```
+- And execute the collectstatic command
+```shell
+$ python manage.py collectstatic
 ```
 
 ## Additional settings
@@ -93,20 +95,25 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # settings.py
 GULP_VERSION = '3.9.1'
 ```
-
 - SEMANTIC_UI_VERSION by default is None, if you want to install a specific version of semantic-ui module (local), you can use this settings, by example:
 ```python
 # settings.py
 SEMANTIC_UI_VERSION = '^2.4.2'
 ```
+- SEMANTIC_DIRNAME by default is 'semantic'', if you defined a custom dirname for the JS and CSS files when the Semantic UI Framework was installed (step 4), you need to add it on this settings.
+```python
+# settings.py
+SEMANTIC_DIRNAME = 'semantic'
+```
 
 ## Uninstall django-semantic-ui
 - You can uninstall Semantic UI Framework and Gulp (local version) using the follow command:
 ```shell
-$ python manage.py semantic_ui uninstall --semantic_folder=semantic
+$ python manage.py semantic_ui uninstall && pip uninstall django2-semantic-ui
 ```
 
 ## Releases notes:
 
 - 1.0.0: Initial and beta version (only installation and settings).
 - 1.0.1: New settings added on the README.md file
+- 1.1.0: Logic updated to install / uninstall django-semantic-ui, new settings added.
