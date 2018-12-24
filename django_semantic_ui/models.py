@@ -1,11 +1,12 @@
 import os
 from django.conf import settings
-from .exceptions import StaticFolderException, SemanticUIException
+from .exceptions import FolderNotFoundException, SemanticUIException
 
 
 class SemanticUI(object):
 
-    def __init__(self, semantic_folder='semantic'):
+    def __init__(self):
+        self.project_folder_path = os.path.dirname(__file__)
         try:
             self.gulp_version = settings.GULP_VERSION
         except:
@@ -14,15 +15,32 @@ class SemanticUI(object):
             self.semantic_ui_version = settings.SEMANTIC_UI_VERSION
         except:
             self.semantic_ui_version = 'latest'
-        self.semantic_folder = semantic_folder if semantic_folder else 'semantic'
         try:
-            self.static_folder_path = '{0}'.format(settings.STATIC_ROOT)
-            if not os.path.exists(self.static_folder_path):
-                raise StaticFolderException("[ERROR] Static folder not exists.")
-            print("Static Folder: {0}".format(self.static_folder_path))
+            self.semantic_folder = settings.SEMANTIC_DIRNAME
         except:
-            raise SemanticUIException("[ERROR] STATIC_ROOT constant not defined on the settings.py.")
-
+            self.semantic_folder = 'semantic'
+        try:
+            if not os.path.exists(self.project_folder_path):
+                raise FolderNotFoundException("[ERROR] Project folder not foound. PATH: {0}".format(
+                    self.project_folder_path))
+            else:
+                self.static_folder_path = '{0}/static'.format(self.project_folder_path)
+                if not os.path.exists(self.static_folder_path):
+                    print("Creating the Static folder in the PATH: {0}".format(
+                        self.static_folder_path))
+                    os.mkdir(self.static_folder_path)
+                try:
+                    os.chdir(self.static_folder_path)
+                    self.semantic_files_path = '{0}/dsu'.format(self.static_folder_path)
+                    if not os.path.exists(self.semantic_files_path):
+                        print("Creating the django_semantic_ui folder on PATH: {0}".format(
+                            self.semantic_files_path))
+                        os.mkdir(self.semantic_files_path)
+                    print("Semantic UI Folder: {0}".format(self.semantic_files_path))
+                except:
+                    raise FolderNotFoundException("[ERROR] Static folder not found")
+        except Exception as e:
+            raise SemanticUIException(e)
 
     def install(self):
         """
@@ -32,7 +50,7 @@ class SemanticUI(object):
         print("Installing started...")
         try:
             print("Moving to static folder...")
-            os.chdir(self.static_folder_path)
+            os.chdir(self.semantic_files_path)
             package_json_path = '{0}/package.json'.format(self.static_folder_path)
             file_exists = os.path.isfile(package_json_path)
             if not file_exists:
@@ -59,7 +77,7 @@ class SemanticUI(object):
         print("Uninstalling started...")
         try:
             print("Moving to Static folder...")
-            os.chdir(self.static_folder_path)
+            os.chdir(self.semantic_files_path)
             print("Uninstalling Semantic UI module...")
             os.system('npm uninstall semantic-ui --save')
             print("Semantic UI module has been removed successfully!.")
@@ -74,7 +92,25 @@ class SemanticUI(object):
                 try:
                     os.system('rm -f semantic.json')
                     print("semantic.json file has been removed...")
-                    print("Semantic UI has been removed successfully!")
+                    print("Deleting package.json file...")
+                    try:
+                        os.system("rm -rf package*")
+                        print("package.json file has been removed.")
+                        node_modules_path = '{0}/node_modules'.format(self.semantic_files_path)
+                        if not os.path.exists(node_modules_path):
+                            raise FolderNotFoundException("[ERROR] node_modules folder not found. PATH: {0}".format(
+                                node_modules_path))
+                        else:
+                            os.system("rm -rf node_modules")
+                        print("Removing semantic folder...")
+                        os.rmdir(self.semantic_files_path)
+                        print("Semantic folder removed.")
+                        print("Removing static folder...")
+                        os.rmdir(self.static_folder_path)
+                        print("Static folder removed.")
+                        print("Semantic UI has been removed successfully!")
+                    except:
+                        raise SemanticUIException("[ERROR] Semantic JSON file not exists.")
                 except:
                     raise SemanticUIException("[ERROR] Semantic JSON file not exists.")
             except:
@@ -90,7 +126,7 @@ class SemanticUI(object):
         print("Gulp Build command started...")
         print("Moving to Static folder...")
         os.chdir(self.static_folder_path)
-        semantic_path = '{0}/{1}'.format(self.static_folder_path, self.semantic_folder)
+        semantic_path = '{0}/{1}'.format(self.semantic_files_path, self.semantic_folder)
         try:
             print("Moving to Semantic folder...")
             os.chdir(semantic_path)
