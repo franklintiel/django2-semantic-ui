@@ -1,24 +1,35 @@
 import os
 from django.conf import settings
 from .exceptions import FolderNotFoundException, SemanticUIException
+from .utils import Constant
 
 
 class SemanticUI(object):
-
+    """
+    Main class used to install, gulp build and uninstall the Semantic UI Framework.
+    """
     def __init__(self):
+        """
+        Build the default folder required by the DSU package.
+        Define the default global variables required by the DSU package.
+        """
         self.project_folder_path = os.path.dirname(__file__)
+        try:
+            self.jquery_url = settings.DSU_JQUERY_URL
+        except:
+            self.jquery_url = Constant.JQUERY_URL
         try:
             self.gulp_version = settings.GULP_VERSION
         except:
-            self.gulp_version = '3.9.1'
+            self.gulp_version = Constant.GULP_VERSION
         try:
             self.semantic_ui_version = settings.SEMANTIC_UI_VERSION
         except:
-            self.semantic_ui_version = 'latest'
+            self.semantic_ui_version = Constant.SEMANTIC_UI_VERSION
         try:
             self.semantic_folder = settings.SEMANTIC_DIRNAME
         except:
-            self.semantic_folder = 'semantic'
+            self.semantic_folder = Constant.SEMANTIC_DIRNAME
         try:
             if not os.path.exists(self.project_folder_path):
                 raise FolderNotFoundException("[ERROR] Project folder not foound. PATH: {0}".format(
@@ -45,7 +56,7 @@ class SemanticUI(object):
     def install(self):
         """
         Install Gulp and Semantic UI Framework on a django project
-        :return:
+        :return: None
         """
         print("Installing started...")
         try:
@@ -72,7 +83,7 @@ class SemanticUI(object):
     def uninstall(self):
         """
         Uninstall Gulp and Semantic UI framework from the django project.
-        :return:
+        :return: None
         """
         print("Uninstalling started...")
         try:
@@ -121,7 +132,7 @@ class SemanticUI(object):
     def build(self):
         """
         Running Gulp build command inside semantic folder.
-        :return:
+        :return: None
         """
         print("Gulp Build command started...")
         print("Moving to Static folder...")
