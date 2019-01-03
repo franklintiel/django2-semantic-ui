@@ -56,25 +56,25 @@ $ python manage.py semantic_ui gulp_build
 ]
 ```
 
-7) Configure the static files and folder, see: [Managing static files](https://docs.djangoproject.com/en/1.11/howto/static-files/)
+7) Configure the static files and folder, see: [Managing static files](https://docs.djangoproject.com/en/2.1/howto/static-files/)
 ```python
 STATIC_URL = '/static/'
 ```
 
 8) Add CSS and JS to your django project
 ```html
+{% load dsu %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Semantic UI Test</title>
-    <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}dsu/semantic_folder_name/dist/semantic.min.css">
+    {% dsu_stylesheet_url %}
 </head>
 <body>
-    <h1>Title example</h1>
-    <button>Button Test example</button>
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
-    <script src="{{ STATIC_URL }}dsu/semantic_folder_name/dist/semantic.min.js"></script>
+    <!-- Your HTML code -->
+    {% dsu_jquery_url %}
+    {% dsu_javascript_url %}
 </body>
 </html>
 ```
@@ -101,10 +101,15 @@ GULP_VERSION = '3.9.1'
 # settings.py
 SEMANTIC_UI_VERSION = '^2.4.2'
 ```
-- SEMANTIC_DIRNAME by default is 'semantic'', if you defined a custom dirname for the JS and CSS files when the Semantic UI Framework was installed (step 4), you need to add it on this settings.
+- SEMANTIC_DIRNAME by default is 'semantic'', if you have defined a custom dirname for the JS and CSS files when the Semantic UI Framework was installed (step 4), you need to add it on this settings.
 ```python
 # settings.py
 SEMANTIC_DIRNAME = 'semantic'
+```
+- DSU_JQUERY_URL by default is 'https://code.jquery.com/jquery-3.1.1.min.js', if you have defined a custom path to you jquery, so, you can use this template tag.
+```python
+# settings.py
+DSU_JQUERY_URL = '...your jquery path...'
 ```
 
 ## Uninstall django-semantic-ui
@@ -120,3 +125,4 @@ $ python manage.py semantic_ui uninstall && pip uninstall django2-semantic-ui
 - 1.1.0: Logic updated to install / uninstall django-semantic-ui, new settings added.
 - 1.1.1: README.md updated
 - 1.1.2: README.md updated
+- 1.2.0: New templatetags added to load the javascripts and stylesheets files
