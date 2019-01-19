@@ -1,4 +1,5 @@
 import os
+import time
 from django.conf import settings
 from .exceptions import FolderNotFoundException, SemanticUIException
 from .utils import Constant
@@ -8,6 +9,7 @@ class SemanticUI(object):
     """
     Main class used to install, gulp build and uninstall the Semantic UI Framework.
     """
+    SECONDS_WAITING_ALLOWED = 15
     def __init__(self):
         """
         Build the default folder required by the DSU package.
@@ -76,6 +78,11 @@ class SemanticUI(object):
             os.system('npm install semantic-ui@{0} --save'.format(self.semantic_ui_version))
             print("Semantic-ui module has been installed successfully (Version installed {0}).".format(
                 self.semantic_ui_version))
+            print('Indexing "semantic-ui" on your django project path: {0}'.format(settings.BASE_DIR))
+            print("Indexing modules...")
+            time.sleep(self.SECONDS_WAITING_ALLOWED)
+            os.chdir(settings.BASE_DIR)
+            time.sleep(5)
             print("Semantic UI  has been installed successfully...")
         except:
             raise SemanticUIException("[ERROR] Installing failed cannot move to static folder.")
@@ -119,6 +126,11 @@ class SemanticUI(object):
                         print("Removing static folder...")
                         os.rmdir(self.static_folder_path)
                         print("Static folder removed.")
+                        print('Indexing "semantic-ui" on your django project path: {0}'.format(settings.BASE_DIR))
+                        print("Indexing modules...")
+                        time.sleep(self.SECONDS_WAITING_ALLOWED)
+                        os.chdir(settings.BASE_DIR)
+                        time.sleep(5)
                         print("Semantic UI has been removed successfully!")
                     except:
                         raise SemanticUIException("[ERROR] Semantic JSON file not exists.")
@@ -143,6 +155,11 @@ class SemanticUI(object):
             os.chdir(semantic_path)
             print("Gulp build command executing...")
             os.system('gulp build')
+            print('Indexing "semantic-ui" on your django project path: {0}'.format(settings.BASE_DIR))
+            print("Indexing modules...")
+            time.sleep(self.SECONDS_WAITING_ALLOWED)
+            os.chdir(settings.BASE_DIR)
+            time.sleep(5)
             print("Gulp build command completed successfully.")
         except:
             raise SemanticUIException(
