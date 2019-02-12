@@ -127,3 +127,4 @@ $ python manage.py semantic_ui uninstall && pip uninstall django2-semantic-ui
 - 1.1.2: README.md updated
 - 1.2.0: New templatetags added to load the javascripts and stylesheets files
 - 1.2.1: README.md updated, bugs fixed to execute the command "python manage.py runserver" after installed.
+- 1.2.2: Bug fixes execute the command "pytho manage.py runserver"

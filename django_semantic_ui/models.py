@@ -9,7 +9,8 @@ class SemanticUI(object):
     """
     Main class used to install, gulp build and uninstall the Semantic UI Framework.
     """
-    SECONDS_WAITING_ALLOWED = 15
+    SECONDS_WAITING_ALLOWED = 5
+
     def __init__(self):
         """
         Build the default folder required by the DSU package.
@@ -32,6 +33,8 @@ class SemanticUI(object):
             self.semantic_folder = settings.SEMANTIC_DIRNAME
         except:
             self.semantic_folder = Constant.SEMANTIC_DIRNAME
+
+    def move_static_folder(self):
         try:
             if not os.path.exists(self.project_folder_path):
                 raise FolderNotFoundException("[ERROR] Project folder not foound. PATH: {0}".format(
@@ -61,6 +64,7 @@ class SemanticUI(object):
         :return: None
         """
         print("Installing started...")
+        self.move_static_folder()
         try:
             print("Moving to static folder...")
             os.chdir(self.semantic_files_path)
@@ -93,6 +97,7 @@ class SemanticUI(object):
         :return: None
         """
         print("Uninstalling started...")
+        self.move_static_folder()
         try:
             print("Moving to Static folder...")
             os.chdir(self.semantic_files_path)
@@ -147,6 +152,7 @@ class SemanticUI(object):
         :return: None
         """
         print("Gulp Build command started...")
+        self.move_static_folder()
         print("Moving to Static folder...")
         os.chdir(self.static_folder_path)
         semantic_path = '{0}/{1}'.format(self.semantic_files_path, self.semantic_folder)
